@@ -347,7 +347,7 @@ struct hmtxvmtx
 						hb_codepoint_t glyph,
 						int *lsb) const
     {
-      if (!font->num_coords)
+      if (!font->has_nonzero_coords)
 	return get_leading_bearing_without_var_unscaled (glyph, lsb);
 
 #ifndef HB_NO_VAR
@@ -404,12 +404,12 @@ struct hmtxvmtx
 
     unsigned get_advance_with_var_unscaled (hb_codepoint_t  glyph,
 					    hb_font_t      *font,
-					    ItemVariationStore::cache_t *store_cache = nullptr) const
+					    hb_scalar_cache_t *store_cache = nullptr) const
     {
       unsigned int advance = get_advance_without_var_unscaled (glyph);
 
 #ifndef HB_NO_VAR
-      if (unlikely (glyph >= num_bearings) || !font->num_coords)
+      if (unlikely (glyph >= num_bearings) || !font->has_nonzero_coords)
 	return advance;
 
       if (var_table.get_length ())
